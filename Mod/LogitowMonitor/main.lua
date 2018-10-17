@@ -23,7 +23,7 @@ end
 
 -- virtual function get mod name
 function LogitowMonitor:OnClickExitApp()
-	return true;
+	return false;
 end	
 
 function LogitowMonitor:GetName()
