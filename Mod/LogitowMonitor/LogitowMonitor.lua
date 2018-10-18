@@ -44,18 +44,20 @@ function LogitowMonitor.setup(pluginBlueTooth)
 	GameLogic:GetFilters():add_filter("blueTooth_on_characteristic", LogitowMonitor.OnCharacteristic);
 	GameLogic:GetFilters():add_filter("blueTooth_on_descriptor", LogitowMonitor.OnDescriptor);
 
-    --LogitowMonitor.initWork();
+    LogitowMonitor.initWork();
 end
 
 function LogitowMonitor.initWork()
     LogitowMonitor.pluginBlueTooth:setDeviceName(BlueConstants.LOGITOW_DEVICE);
 
+
+    
+
+    LogitowMonitor.pluginBlueTooth:setCharacteristicsUuid(BlueConstants.WRITE_BLOCK_CONFIG, BlueConstants.WRITE_CHARACTERISTIC_CONFIG);
     local serId = BlueConstants.READ_BLOCK_SERVER;
     local chaId = BlueConstants.READ_BLOCK_CHARACTERISTIC;
     LogitowMonitor.pluginBlueTooth:setCharacteristicsUuid(serId, chaId);
-
-    LogitowMonitor.pluginBlueTooth:setCharacteristicsUuid(BlueConstants.WRITE_BLOCK_CONFIG, BlueConstants.WRITE_CHARACTERISTIC_CONFIG);
-
+	
     LogitowMonitor.pluginBlueTooth:setupBluetoothDelegate()
 end
 
@@ -112,7 +114,7 @@ function LogitowMonitor.OnReadFinshed()
 end
 
 function LogitowMonitor.OnCharacteristic(params)
-	commonlib.echo(string.format("-------------------------- OnCharacteristic uuid:%s data:%s io:%s", params.uuid, params.data, params.io));
+	--commonlib.echo(string.format("-------------------------- OnCharacteristic uuid:%s data:%s io:%s", params.uuid, params.data, params.io));
 
 	if(params.io ~= "c")then
 		return;
@@ -180,11 +182,6 @@ function LogitowMonitor.OnCharacteristic(params)
 end	
 
 function LogitowMonitor.OnDescriptor(params)
-	if BlueConstants.READ_BLOCK_CHARACTERISTIC ~= LogitowMonitor.fatherMap[params.uuid] then
-		--commonlib.echo("--------------------------OnDescriptor return return -end2:" .. params.uuid);
-		return;
-	end	
-	
 
 end	
 
@@ -208,9 +205,6 @@ function LogitowMonitor._updateBleLv()
 	if LogitowMonitor.isConnect then
 		local writeData = BlueConstants.WRITE_GET_BATTERY_HEX;
 		LogitowMonitor.pluginBlueTooth:writeToCharacteristic(BlueConstants.WRITE_BLOCK_CONFIG, BlueConstants.WRITE_CHARACTERISTIC_CONFIG, writeData);
-
-        LogitowMonitor.pluginBlueTooth:characteristicGetStrValue(BlueConstants.WRITE_BLOCK_CONFIG, BlueConstants.WRITE_CHARACTERISTIC_CONFIG);
-
 		BlueToothSearchPage.SetBlueTips()
 	end	
 end
