@@ -50,7 +50,7 @@ end
 function LogitowMonitor.initWork()
     LogitowMonitor.pluginBlueTooth:setDeviceName(BlueConstants.LOGITOW_DEVICE);
 
-    --LogitowMonitor.pluginBlueTooth:setCharacteristicsUuid(BlueConstants.WRITE_BLOCK_CONFIG, BlueConstants.WRITE_CHARACTERISTIC_CONFIG);
+    LogitowMonitor.pluginBlueTooth:setCharacteristicsUuid(BlueConstants.WRITE_BLOCK_CONFIG, BlueConstants.WRITE_CHARACTERISTIC_CONFIG);
     local serId = BlueConstants.READ_BLOCK_SERVER;
     local chaId = BlueConstants.READ_BLOCK_CHARACTERISTIC;
     LogitowMonitor.pluginBlueTooth:setCharacteristicsUuid(serId, chaId);
