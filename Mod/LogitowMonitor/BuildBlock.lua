@@ -134,10 +134,16 @@ function BuildBlock.Connect(box_id, connect_face, child_id)
 	
 	local pos_offset = GameLogic.GetFilters():apply_filters("BuildBlock_GetPosOffset", pos_offset_default);
 
-	-- 计算子积木坐标
-	child.X = parent.X + pos_offset[dir_idx][1];
-	child.Y = parent.Y + pos_offset[dir_idx][2];
-	child.Z = parent.Z + pos_offset[dir_idx][3];
+	-- 计算子积木坐标（忽略主方块）
+	if(box_id == 0) then
+		child.X = 0;
+		child.Y = 0;
+		child.Z = 0;
+	else
+		child.X = parent.X + pos_offset[dir_idx][1];
+		child.Y = parent.Y + pos_offset[dir_idx][2];
+		child.Z = parent.Z + pos_offset[dir_idx][3];
+	end	
 
 	--LOG.std("BuildBlock", "debug", "Connect", "child_id:"..child_id);
 
@@ -310,7 +316,8 @@ function BuildBlock.getChildBlocks()
 		child.id = -1;
 		child.Childs[3] = BuildBlockRoot;	
 		--{ 3, 5, 2, 4, 1, 6 }
-		return child;
+		--return child;
+		return BuildBlockRoot;
 	end
 	
 	local getChildBlocksFunc = GameLogic.GetFilters():apply_filters("BuildBlock_GetChildBlockFunc", _getChildBlocksDefault);	
@@ -320,7 +327,16 @@ end
 function BuildBlock.Export2BuilData()	
 	local retBlocks = {};
 	local child = BuildBlock.getChildBlocks();
-	BuildBlock._setBlockData(child, retBlocks);
+	
+	-- 找到和主方块链接的第一个方块（忽略主方块）
+	local setChild = child;
+	for i = 1, 6 do
+		if child.Childs[i] then
+			setChild = child.Childs[i];
+			break;
+		end
+	end
+	BuildBlock._setBlockData(setChild, retBlocks);
 	local GameLogic = commonlib.gettable("MyCompany.Aries.Game.GameLogic");
 	GameLogic.GetFilters():apply_filters("BuildBlock_SendBuildBlockData", retBlocks, BuildBlock.last_box_id, BuildBlock.last_box_face, BuildBlock.last_child_id);
 
