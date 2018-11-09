@@ -64,6 +64,12 @@ end
 function LogitowMonitor.startBuildTask()
 	local function onEnd()
 		BuildBlock.Clear();
+		
+		local Event = commonlib.gettable("System.Core.Event"); 
+		local event = Event:new():init("BlockFinsh"); 
+		event.cmd_text = {isLogiEnd = true};
+		GameLogic:event(event);		
+			
 		LogitowMonitor.nowBuildTask = nil;
 	end
 	local buildTask = BtBaseBuildTask:new({onEndFunc = onEnd});
