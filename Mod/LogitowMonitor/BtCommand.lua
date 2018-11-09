@@ -63,5 +63,21 @@ function BtCommand:InstallCommand()
 			BuildBlock.ProcessCommand(box_id, box_face, child_id);
 		end,
 	};	
+	
+	Commands["showBluePage"] = {
+		name="showBluePage", 
+		quick_ref="/showBluePage ", 
+		desc=[[]], 
+		handler = function(cmd_name, cmd_text, cmd_params, fromEntity)
+			NPL.load("(gl)Mod/LogitowMonitor/BlueToothSearchPage.lua");
+			local BlueToothSearchPage = commonlib.gettable("MyCompany.Aries.Game.GUI.BlueToothSearchPage");
+			
+			if BlueToothSearchPage.page then
+				BlueToothSearchPage.OnClose();
+			else
+				BlueToothSearchPage.OnShowPage();
+			end
+		end,
+	};	
 
 end

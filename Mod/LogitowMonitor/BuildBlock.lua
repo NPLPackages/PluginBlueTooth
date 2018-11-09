@@ -134,7 +134,7 @@ function BuildBlock.Connect(box_id, connect_face, child_id)
 	
 	local pos_offset = GameLogic.GetFilters():apply_filters("BuildBlock_GetPosOffset", pos_offset_default);
 
-	-- 计算子积木坐标（忽略主方块）
+	-- 计算子积木坐标
 	if(box_id == 0) then
 		child.X = 0;
 		child.Y = 0;
@@ -328,7 +328,6 @@ function BuildBlock.Export2BuilData()
 	local retBlocks = {};
 	local child = BuildBlock.getChildBlocks();
 	
-	-- 找到和主方块链接的第一个方块（忽略主方块）
 	local setChild = child;
 	for i = 1, 6 do
 		if child.Childs[i] then

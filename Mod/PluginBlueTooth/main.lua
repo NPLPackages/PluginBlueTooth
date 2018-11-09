@@ -142,7 +142,7 @@ function PluginBlueTooth.regNplEngineeBridge()
 			local ret = callJavaStaticMethod("plugin/Bluetooth/InterfaceBluetooth" , "registerLuaCall", sigs, args)		
 		end
 	elseif (platform == "win32") then
-		--NPL.activate("pluginBle.dll", {cmd = "startble", luaPath = "(gl)Mod/PluginBlueTooth/main.lua"});
+		NPL.activate("pluginBle.dll", {cmd = "startble", luaPath = "(gl)Mod/PluginBlueTooth/main.lua"});
     elseif (platform == "ios") then
         NPL.call("LuaObjcBridge.cpp", {});
         local args = {luaPath = "(gl)Mod/PluginBlueTooth/main.lua"}
