@@ -57,8 +57,7 @@ function LogitowMonitor:init()
 	end
 	
 	logitowMonitor.InstallCommand()
-	
-	GameLogic:Connect("WorldLoaded", LogitowMonitor, LogitowMonitor.onLoadWorldFinshed, "LogitowMonitor")	
+	GameLogic.GetFilters():add_filter("OnWorldLoaded", LogitowMonitor.onLoadWorldFinshed);
 end
 
 function LogitowMonitor:OnLogin()

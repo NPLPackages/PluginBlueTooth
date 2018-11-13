@@ -46,7 +46,7 @@ end
 
 function BlueToothSearchPage.OnClickWorld(index)
 	if(index == 1)then
-		GameLogic.RunCommand("/loadworld https://git.keepwork.com/gitlab_rls_hetter1/world_base32_mn4wu2brge4a/repository/archive.zip");
+		GameLogic.RunCommand("/loadworld https://git.keepwork.com/gitlab_rls_hetter1/world_base32_mn4wu2brgeyte/repository/archive.zip");
 	elseif(index == 2) then
 		GameLogic.RunCommand("/open https://keepwork.com/official/bluetooth/index");
 	elseif(index == 3) then
