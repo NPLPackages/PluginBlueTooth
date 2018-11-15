@@ -46,11 +46,41 @@ end
 
 function BlueToothSearchPage.OnClickWorld(index)
 	if(index == 1)then
-		GameLogic.RunCommand("/loadworld https://git.keepwork.com/gitlab_rls_hetter1/world_base32_mn4wu2brgeyte/repository/archive.zip");
+		BlueToothSearchPage.ChangeNarrowWide();
+		
+		local filename = "https://git.keepwork.com/gitlab_rls_hetter1/world_base32_mn4wu2brgeyte/repository/archive.zip";
+		
+		NPL.load("(gl)script/apps/Aries/Creator/Game/Login/DownloadWorld.lua");
+		local DownloadWorld = commonlib.gettable("MyCompany.Aries.Game.MainLogin.DownloadWorld")
+		NPL.load("(gl)script/apps/Aries/Creator/Game/Login/RemoteWorld.lua");
+		local RemoteWorld = commonlib.gettable("MyCompany.Aries.Creator.Game.Login.RemoteWorld");
+		
+		local world;
+		local function LoadWorld_(world, refreshMode)
+			if(world) then
+				local mytimer = commonlib.Timer:new({callbackFunc = function(timer)
+					NPL.load("(gl)script/apps/Aries/Creator/Game/Login/InternetLoadWorld.lua");
+
+					local InternetLoadWorld = commonlib.gettable("MyCompany.Aries.Creator.Game.Login.InternetLoadWorld");
+					InternetLoadWorld.LoadWorld(world, nil, refreshMode or "auto", function(bSucceed, localWorldPath)
+						DownloadWorld.Close();
+					end);
+				end});
+				-- prevent recursive calls.
+				mytimer:Change(1,nil);
+			else
+				_guihelper.MessageBox(L"无效的世界文件");
+			end
+		end
+		
+		local RemoteWorld = commonlib.gettable("MyCompany.Aries.Creator.Game.Login.RemoteWorld");
+		world = RemoteWorld.LoadFromHref(filename, "self");
+		DownloadWorld.ShowPage(filename);
+		LoadWorld_(world, "auto");
 	elseif(index == 2) then
-		GameLogic.RunCommand("/open https://keepwork.com/official/bluetooth/index");
+		ParaGlobal.ShellExecute("open", "https://keepwork.com/official/bluetooth/index", "", "", 1);
 	elseif(index == 3) then
-		GameLogic.RunCommand("/open https://keepwork.com/official/bluetooth/support");
+		ParaGlobal.ShellExecute("open", "https://keepwork.com/official/bluetooth/support", "", "", 1);
 	end
 end
 
@@ -60,11 +90,47 @@ function BlueToothSearchPage.OnInit(isNarrow)
 	BlueToothSearchPage.page = document:GetPageCtrl();
 end
 
+function BlueToothSearchPage.OnDragBegin()
+	if BlueToothSearchPage.page and BlueToothSearchPage.isNarrowMode then
+		local dragContainer = BlueToothSearchPage.page:FindControl("narrow_mode")
+		local x,y = dragContainer:GetAbsPosition();
+		BlueToothSearchPage.dx1 = x;
+		BlueToothSearchPage.dy1 = y;
+	end	
+end	
+
+function BlueToothSearchPage.OnDragEnd()
+	if BlueToothSearchPage.page and BlueToothSearchPage.isNarrowMode then
+		local dragContainer = BlueToothSearchPage.page:FindControl("narrow_mode")
+		local x,y = dragContainer:GetAbsPosition();
+		
+		BlueToothSearchPage.narrowX = BlueToothSearchPage.narrowX + (BlueToothSearchPage.dx2 - BlueToothSearchPage.dx1);
+		BlueToothSearchPage.narrowY = BlueToothSearchPage.narrowY + (BlueToothSearchPage.dy2 - BlueToothSearchPage.dy1);
+	end	
+end	
+
+function BlueToothSearchPage.OnDragMove()
+	if BlueToothSearchPage.page and BlueToothSearchPage.isNarrowMode then
+		local dragContainer = BlueToothSearchPage.page:FindControl("narrow_mode")
+		local x,y = dragContainer:GetAbsPosition();
+		BlueToothSearchPage.dx2 = x;
+		BlueToothSearchPage.dy2 = y;
+		
+		local Page = BlueToothSearchPage.page
+		local x, y, width, height = Page:FindControl("narrow_mode"):GetAbsPosition();
+		local wnd = Page:GetWindow():GetWindowFrame():GetWindowUIObject();
+		if(wnd) then
+			wnd:Reposition("_lt", x, y, width, height)
+		end			
+	end	
+end	
+
 function BlueToothSearchPage.OnClose()
+
 	if BlueToothSearchPage.page then
 		BlueToothSearchPage.page:CloseWindow();
 		BlueToothSearchPage.page = nil;
-	end	
+	end
 end
 
 function BlueToothSearchPage._ShowPageWide()
@@ -95,6 +161,10 @@ end
 
 
 function BlueToothSearchPage._ShowPageNarrow()
+	if BlueToothSearchPage.narrowX == nil or BlueToothSearchPage.narrowY == nil then
+		BlueToothSearchPage.narrowX = -200;
+		BlueToothSearchPage.narrowY = 0;
+	end
 	local params = {
 			url = "Mod/LogitowMonitor/BlueToothSearchPage_narrow.html", 
 			name = "PC.BlueToothSearchPage_narrow", 
@@ -111,8 +181,8 @@ function BlueToothSearchPage._ShowPageNarrow()
 			cancelShowAnimation = true,
 			directPosition = true,
 				align = "_rt",
-				x = -200,
-				y = 0,
+				x = BlueToothSearchPage.narrowX, 
+				y = BlueToothSearchPage.narrowY,
 				width = 200,
 				height = 200,
 			};
@@ -133,8 +203,8 @@ function BlueToothSearchPage.OnShowPage()
 end	
 
 function BlueToothSearchPage.ChangeNarrowWide()
-    BlueToothSearchPage.isNarrowMode = not BlueToothSearchPage.isNarrowMode;
-	BlueToothSearchPage.OnClose();
+	BlueToothSearchPage.OnClose();	
+	BlueToothSearchPage.isNarrowMode = not BlueToothSearchPage.isNarrowMode;
 	BlueToothSearchPage.OnShowPage();
 end
 
@@ -197,6 +267,6 @@ function BlueToothSearchPage.doSearchAnim()
 			end
 		end})
 		
-		BlueToothSearchPage.searchTimer:Change(500, 500);
+		--BlueToothSearchPage.searchTimer:Change(500, 500);
 	end
 end
