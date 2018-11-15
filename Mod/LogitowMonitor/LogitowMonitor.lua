@@ -9,7 +9,6 @@ NPL.load("(gl)Mod/LogitowMonitor/LogitowMonitor.lua");
 local LogitowMonitor = commonlib.gettable("Mod.LogitowMonitor.LogitowMonitor");
 ------------------------------------------------------------
 ]]
-
 local GameLogic = commonlib.gettable("MyCompany.Aries.Game.GameLogic")
 local EntityManager = commonlib.gettable("MyCompany.Aries.Game.EntityManager");
 local PluginBlueTooth = commonlib.gettable("Mod.PluginBlueTooth");

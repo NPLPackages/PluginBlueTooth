@@ -9,7 +9,7 @@ NPL.load("(gl)Mod/PluginBlueTooth/main.lua");
 local PluginBlueTooth = commonlib.gettable("Mod.PluginBlueTooth");
 ------------------------------------------------------------
 ]]
-
+NPL.load("(gl)script/apps/Aries/Creator/Game/game_logic.lua");
 local GameLogic = commonlib.gettable("MyCompany.Aries.Game.GameLogic")
 local EntityManager = commonlib.gettable("MyCompany.Aries.Game.EntityManager");
 local PluginBlueTooth = commonlib.inherit(commonlib.gettable("Mod.ModBase"),commonlib.gettable("Mod.PluginBlueTooth"));

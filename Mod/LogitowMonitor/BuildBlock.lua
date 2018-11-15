@@ -8,7 +8,7 @@ NPL.load("(gl)Mod/LogitowMonitor/BuildBlock.lua");
 local BuildBlock = commonlib.gettable("Mod.LogitowMonitor.BuildBlock");
 -------------------------------------------------------
 ]]
-
+local GameLogic = commonlib.gettable("MyCompany.Aries.Game.GameLogic")
 local BuildBlock = commonlib.inherit(nil,commonlib.gettable("Mod.LogitowMonitor.BuildBlock"));
 local EntityManager = commonlib.gettable("MyCompany.Aries.Game.EntityManager");
 
