@@ -141,8 +141,11 @@ function LogitowMonitor.OnCharacteristic(params)
 		if byte >= 48 and byte <= 57 then
 			return byte - 48;
 		-- A~F	
-		elseif byte >= 65 then
+		elseif byte >= 65 and byte <= 70 then
 			return (byte - 65) + 10;
+		-- a~f	
+		elseif byte >= 97 then
+			return (byte - 97) + 10;			
 		end
 	end
 	
