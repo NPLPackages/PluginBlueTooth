@@ -9,56 +9,16 @@ LuaJavaBridge.callJavaStaticMethod("plugin/Bluetooth/InterfaceBluetooth" , "regi
 
 sigs的参数含义如下，更多资料可以去自行google luaj callJavaStaticMethod等关键字，代码照抄自cocos2dx，主要实现在LuaJavaBridge.cpp中，利用了jni和tolua实现了lua、java、cpp的交互
 
-FieldDescriptor
- JavaLanguageType
-
-
-
-
-
-Z
- boolean
-
-
-
-B
- byte
-
-
-
-C 
-char
-
-
-
-S
- short
-
-
-
-I 
-int
-
-
-
-J 
-long
-
-
-
-F 
-float
-
-
-
-D
- double
-
-
-
-
-
-Ps: 如果需要调用的方法是 空参数，则方法签名是 “ ()V ”
+FieldDescriptor JavaLanguageType
+Z boolean
+B byte
+C char
+S short
+I int
+J long
+F float
+D double
+Ps: 如果需要调用的方法是空参数，则方法签名是 “()V”
 
 java调用lua：
 关键函数是callBaseBridge，传入实现定义好的id和字符串（更好的替代方法，压缩成字节流传给lua，再在lua中解压），即可在lua中调用。
